@@ -87,7 +87,7 @@ export const RepositoryDescriptionContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  margin-left: 20px;
+  margin: 20px;
 `;
 
 export const RepositoryName = styled.strong`

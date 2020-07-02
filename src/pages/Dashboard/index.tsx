@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, FormEvent } from 'react';
 
 import { IoIosArrowForward } from 'react-icons/io';
+import api from '../../services/api';
 
 import {
   Logo,
@@ -19,83 +20,67 @@ import {
 
 import logoImage from '../../assets/img/logo-github.svg';
 
-const Dashboard: React.FC = () => (
-  <>
-    <Logo src={logoImage} alt="Logo Github Explorer" />
-    <DashboardTitle>Expore repositórios no Github</DashboardTitle>
+interface Repository {
+  id: number;
+  full_name: string;
+  description: string;
+  owner: {
+    login: string;
+    avatar_url: string;
+  };
+}
 
-    <Form>
-      <InputSearchRepository />
-      <ButtonSearchRepository>Pesquisar</ButtonSearchRepository>
-    </Form>
+const Dashboard: React.FC = () => {
+  const [newRepository, setNewRepository] = useState('');
+  const [respositories, setRepositories] = useState<Repository[]>([]);
 
-    <RepositoriesContainer>
-      <Repository>
-        <UserImage
-          src="https://avatars1.githubusercontent.com/u/42845859?s=400&u=1d1e4f6a234e5ed703f0187dd1574f07fbe3a733&v=4"
-          alt="Gabryelle SS"
+  const handleAddRepository = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    event.preventDefault();
+
+    const response = await api.get<Repository>(`repos/${newRepository}`);
+
+    const repository = response.data;
+
+    setRepositories([...respositories, repository]);
+    setNewRepository('');
+  };
+
+  return (
+    <>
+      <Logo src={logoImage} alt="Logo Github Explorer" />
+      <DashboardTitle>Expore repositórios no Github</DashboardTitle>
+
+      <Form onSubmit={handleAddRepository}>
+        <InputSearchRepository
+          value={newRepository}
+          onChange={(e) => setNewRepository(e.target.value)}
         />
-        <RepositoryDescriptionContainer>
-          <RepositoryName>gabryelleSS</RepositoryName>
-          <RepositoryDescription>
-            Descrição do repositório
-          </RepositoryDescription>
-        </RepositoryDescriptionContainer>
+        <ButtonSearchRepository>Pesquisar</ButtonSearchRepository>
+      </Form>
 
-        <RepositoryArrowIcon>
-          <IoIosArrowForward />
-        </RepositoryArrowIcon>
-      </Repository>
-      <Repository>
-        <UserImage
-          src="https://avatars1.githubusercontent.com/u/42845859?s=400&u=1d1e4f6a234e5ed703f0187dd1574f07fbe3a733&v=4"
-          alt="Gabryelle SS"
-        />
-        <RepositoryDescriptionContainer>
-          <RepositoryName>gabryelleSS</RepositoryName>
-          <RepositoryDescription>
-            Descrição do repositório
-          </RepositoryDescription>
-        </RepositoryDescriptionContainer>
+      <RepositoriesContainer>
+        {respositories.map((repo) => (
+          <Repository key={repo.id}>
+            <UserImage
+              src={repo.owner.avatar_url}
+              alt={`Imagem do repositário do usuário ${repo.owner.login}`}
+            />
 
-        <RepositoryArrowIcon>
-          <IoIosArrowForward />
-        </RepositoryArrowIcon>
-      </Repository>
-      <Repository>
-        <UserImage
-          src="https://avatars1.githubusercontent.com/u/42845859?s=400&u=1d1e4f6a234e5ed703f0187dd1574f07fbe3a733&v=4"
-          alt="Gabryelle SS"
-        />
-        <RepositoryDescriptionContainer>
-          <RepositoryName>gabryelleSS</RepositoryName>
-          <RepositoryDescription>
-            Descrição do repositório
-          </RepositoryDescription>
-        </RepositoryDescriptionContainer>
+            <RepositoryDescriptionContainer>
+              <RepositoryName>{repo.full_name}</RepositoryName>
+              <RepositoryDescription>{repo.description}</RepositoryDescription>
+            </RepositoryDescriptionContainer>
 
-        <RepositoryArrowIcon>
-          <IoIosArrowForward />
-        </RepositoryArrowIcon>
-      </Repository>
-      <Repository>
-        <UserImage
-          src="https://avatars1.githubusercontent.com/u/42845859?s=400&u=1d1e4f6a234e5ed703f0187dd1574f07fbe3a733&v=4"
-          alt="Gabryelle SS"
-        />
-        <RepositoryDescriptionContainer>
-          <RepositoryName>gabryelleSS</RepositoryName>
-          <RepositoryDescription>
-            Descrição do repositório
-          </RepositoryDescription>
-        </RepositoryDescriptionContainer>
-
-        <RepositoryArrowIcon>
-          <IoIosArrowForward />
-        </RepositoryArrowIcon>
-      </Repository>
-    </RepositoriesContainer>
-  </>
-);
+            <RepositoryArrowIcon>
+              <IoIosArrowForward />
+            </RepositoryArrowIcon>
+          </Repository>
+        ))}
+      </RepositoriesContainer>
+    </>
+  );
+};
 
 export default Dashboard;
