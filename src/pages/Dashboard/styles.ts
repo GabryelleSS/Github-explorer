@@ -1,5 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { shade } from 'polished';
+
+interface FormProps {
+  hasError: boolean;
+}
 
 export const Logo = styled.img``;
 
@@ -13,17 +17,18 @@ export const DashboardTitle = styled.h1`
 
 export const Form = styled.form`
   display: flex;
-  margin: 40px 0 80px 0;
+  margin: 40px 0 10px 0;
   max-width: 700px;
 `;
 
 export const InputSearchRepository = styled.input.attrs({
   placeholder: 'Digite o nome do repositório',
   type: 'text',
-})`
+})<FormProps>`
   background-color: #fff;
-  border: none;
+  border: 2px solid #fff;
   border-radius: 5px 0 0 5px;
+  border-right: 0;
   color: #3a3a3a;
   flex: 1;
   height: 70px;
@@ -31,15 +36,21 @@ export const InputSearchRepository = styled.input.attrs({
   width: 50%;
 
   &::placeholder {
-    color: 'a8a8b3';
+    color: #a8a8b3;
   }
+
+  ${(FormProps) =>
+    FormProps.hasError &&
+    css`
+      border-color: #c53030;
+    `}
 `;
 
 export const ButtonSearchRepository = styled.button.attrs({
   type: 'submit',
 })`
   background-color: #04d361;
-  border: none;
+  border: 2px solid #04d361;
   border-radius: 0 5px 5px 0;
   color: #fff;
   font-weight: bold;
@@ -49,11 +60,18 @@ export const ButtonSearchRepository = styled.button.attrs({
 
   &:hover {
     background-color: ${shade(0.2, '#04d361')};
+    border-color: ${shade(0.2, '#04d361')};
   }
+`;
+
+export const MessageError = styled.span`
+  color: #c53030;
+  font-size: 16px;
 `;
 
 export const RepositoriesContainer = styled.div`
   max-width: 700px;
+  margin-top: 30px;
 `;
 
 export const Repository = styled.a.attrs({
@@ -112,6 +130,7 @@ export default {
   Form,
   InputSearchRepository,
   ButtonSearchRepository,
+  MessageError,
   RepositoriesContainer,
   Repository,
   RepositoryDescriptionContainer,
