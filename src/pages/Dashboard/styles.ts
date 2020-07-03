@@ -74,9 +74,7 @@ export const RepositoriesContainer = styled.div`
   margin-top: 30px;
 `;
 
-export const Repository = styled.a.attrs({
-  href: '#',
-})`
+export const Repository = styled.div`
   align-items: center;
   background-color: #fff;
   border-radius: 5px;
@@ -86,7 +84,7 @@ export const Repository = styled.a.attrs({
   text-decoration: none;
   width: 100%;
 
-  & + a {
+  & + div {
     margin-top: 20px;
   }
 

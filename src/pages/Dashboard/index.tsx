@@ -1,4 +1,5 @@
 import React, { useState, FormEvent, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import { IoIosArrowForward } from 'react-icons/io';
 import api from '../../services/api';
@@ -95,21 +96,29 @@ const Dashboard: React.FC = () => {
 
       <RepositoriesContainer>
         {repositories.map((repo) => (
-          <Repository key={repo.id}>
-            <UserImage
-              src={repo.owner.avatar_url}
-              alt={`Imagem do repositário do usuário ${repo.owner.login}`}
-            />
+          <Link
+            key={repo.full_name}
+            to={`/repositories/${repo.full_name}`}
+            style={{ textDecoration: 'none' }}
+          >
+            <Repository>
+              <UserImage
+                src={repo.owner.avatar_url}
+                alt={`Imagem do repositário do usuário ${repo.owner.login}`}
+              />
 
-            <RepositoryDescriptionContainer>
-              <RepositoryName>{repo.full_name}</RepositoryName>
-              <RepositoryDescription>{repo.description}</RepositoryDescription>
-            </RepositoryDescriptionContainer>
+              <RepositoryDescriptionContainer>
+                <RepositoryName>{repo.full_name}</RepositoryName>
+                <RepositoryDescription>
+                  {repo.description}
+                </RepositoryDescription>
+              </RepositoryDescriptionContainer>
 
-            <RepositoryArrowIcon>
-              <IoIosArrowForward />
-            </RepositoryArrowIcon>
-          </Repository>
+              <RepositoryArrowIcon>
+                <IoIosArrowForward />
+              </RepositoryArrowIcon>
+            </Repository>
+          </Link>
         ))}
       </RepositoriesContainer>
     </>
