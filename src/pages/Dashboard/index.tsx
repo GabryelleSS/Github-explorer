@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 
 import { IoIosArrowForward } from 'react-icons/io';
 import api from '../../services/api';
@@ -34,7 +34,25 @@ interface Repository {
 const Dashboard: React.FC = () => {
   const [newRepository, setNewRepository] = useState('');
   const [inputError, setInputError] = useState('');
-  const [respositories, setRepositories] = useState<Repository[]>([]);
+
+  const [repositories, setRepositories] = useState<Repository[]>(() => {
+    const storageRepositories = localStorage.getItem(
+      '@GithubExplorer:repositories'
+    );
+
+    if (storageRepositories) {
+      return JSON.parse(storageRepositories);
+    }
+
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      '@GithubExplorer:repositories',
+      JSON.stringify(repositories)
+    );
+  }, [repositories]);
 
   const handleAddRepository = async (
     event: FormEvent<HTMLFormElement>
@@ -51,7 +69,7 @@ const Dashboard: React.FC = () => {
 
       const repository = response.data;
 
-      setRepositories([...respositories, repository]);
+      setRepositories([...repositories, repository]);
       setNewRepository('');
       setInputError('');
     } catch (error) {
@@ -76,7 +94,7 @@ const Dashboard: React.FC = () => {
       {inputError && <MessageError>{inputError}</MessageError>}
 
       <RepositoriesContainer>
-        {respositories.map((repo) => (
+        {repositories.map((repo) => (
           <Repository key={repo.id}>
             <UserImage
               src={repo.owner.avatar_url}
