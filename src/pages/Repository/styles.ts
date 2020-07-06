@@ -71,7 +71,9 @@ export const TitleItems = styled.span`
 
 export const IssuesContainer = styled.div``;
 
-export const IssuesDescriptionContainer = styled.div`
+export const IssuesDescriptionContainer = styled.a.attrs({
+  target: 'blank',
+})`
   align-items: center;
   background-color: #fff;
   border-radius: 5px;
@@ -79,6 +81,7 @@ export const IssuesDescriptionContainer = styled.div`
   justify-content: space-between;
   margin-top: 50px;
   padding: 35px 24px;
+  text-decoration: none;
   transition: transform 0.2s;
   width: 100%;
 

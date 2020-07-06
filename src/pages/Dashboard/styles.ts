@@ -79,6 +79,7 @@ export const Repository = styled.div`
   background-color: #fff;
   border-radius: 5px;
   display: flex;
+  margin-top: 20px;
   padding: 24px;
   transition: transform 0.2s;
   text-decoration: none;
